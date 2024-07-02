@@ -3,16 +3,16 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 
 
 const IndexingPage: React.FC = () => {
   const initialCheckboxState = {
-    standingBothLegs: 0,
-    standingAffectedLeg: 0,
-    walkingPlainSurfaces: 0,
-    sittingChair: 0,
-    climbingStairs: 0,
-    gettingDownStairs: 0,
-    takingTurns: 0,
-    squattingFloor: 0,
-    kneelingDown: 0,
-    holdingPen: 0,
+    standingBothLegs: null,
+    standingAffectedLeg: null,
+    walkingPlainSurfaces: null,
+    sittingChair: null,
+    climbingStairs: null,
+    gettingDownStairs: null,
+    takingTurns: null,
+    squattingFloor: null,
+    kneelingDown: null,
+    holdingPen: null,
   };
 
   const [checkboxValues, setCheckboxValues] = useState(initialCheckboxState);
@@ -21,9 +21,39 @@ const IndexingPage: React.FC = () => {
   const handleCheckboxPress = (category: string, value: number) => {
     setCheckboxValues(prevState => ({
       ...prevState,
-      [category]: prevState[category] === value ? 0 : value, // Toggle the checkbox value
+      [category]: prevState[category] === value ? null : value, // Toggle the checkbox value
     }));
   };
+
+  const renderCategory = (categoryKey: string, categoryLabel: string) => (
+    <View style={styles.section}>
+      <View style={styles.sectionContent}>
+        <Text style={styles.label}>{categoryLabel}</Text>
+        <View style={styles.checkboxContainer}>
+          {Array(5).fill(null).map((_, index) => {
+            const value = index === 0 ? 0 : (index === 1 ? 3 : (index === 2 ? 5 : (index === 3 ? 7 : 9)));
+            return (
+              <View key={index} style={styles.checkboxWrapper}>
+                <TouchableOpacity
+                  style={[
+                    styles.checkbox,
+                    checkboxValues[categoryKey] === value && styles.selectedCheckbox,
+                    {
+                      backgroundColor: `rgba(255, ${200 - index * 40}, ${200 - index * 40}, 1)`, // Reducing red tone gradually
+                    },
+                  ]}
+                  onPress={() => handleCheckboxPress(categoryKey, value)}
+                >
+                  {checkboxValues[categoryKey] === value && <View style={styles.checkIcon} />}
+                </TouchableOpacity>
+                <Text style={styles.buttonValue}>{value}</Text>
+              </View>
+            );
+          })}
+        </View>
+      </View>
+    </View>
+  );
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -34,7 +64,7 @@ const IndexingPage: React.FC = () => {
             <Text style={styles.title}>ROM strength and Mobility</Text>
           </View>
         </View>
-        
+
         <View style={styles.section}>
           <View style={styles.sectionContent}>
             <Text style={styles.label}>Name:</Text>
@@ -47,237 +77,16 @@ const IndexingPage: React.FC = () => {
           </View>
         </View>
 
-        <View style={styles.section}>
-          <View style={styles.sectionContent}>
-            <Text style={styles.label}>Standing on both legs:</Text>
-            <View style={styles.checkboxContainer}>
-              {Array(5).fill(null).map((_, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.checkbox,
-                    checkboxValues.standingBothLegs === 9 - index * 2 && styles.selectedCheckbox,
-                    {
-                      backgroundColor: `rgba(255, ${255 - index * 20}, ${255 - index * 20}, 1)`, // Reducing red tone gradually
-                    },
-                  ]}
-                  onPress={() => handleCheckboxPress('standingBothLegs', 9 - index * 2)} // Assigning values 0, 3, 5, 7, 9
-                >
-                  {checkboxValues.standingBothLegs === 9 - index * 2 && <View style={styles.checkIcon} />}
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <View style={styles.sectionContent}>
-            <Text style={styles.label}>Standing on the affected leg:</Text>
-            <View style={styles.checkboxContainer}>
-              {Array(5).fill(null).map((_, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.checkbox,
-                    checkboxValues.standingAffectedLeg === 9 - index * 2 && styles.selectedCheckbox,
-                    {
-                      backgroundColor: `rgba(255, ${255 - index * 20}, ${255 - index * 20}, 1)`, // Reducing red tone gradually
-                    },
-                  ]}
-                  onPress={() => handleCheckboxPress('standingAffectedLeg', 9 - index * 2)} // Assigning values 0, 3, 5, 7, 9
-                >
-                  {checkboxValues.standingAffectedLeg === 9 - index * 2 && <View style={styles.checkIcon} />}
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <View style={styles.sectionContent}>
-            <Text style={styles.label}>Walking on plain surfaces:</Text>
-            <View style={styles.checkboxContainer}>
-              {Array(5).fill(null).map((_, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.checkbox,
-                    checkboxValues.walkingPlainSurfaces === 9 - index * 2 && styles.selectedCheckbox,
-                    {
-                      backgroundColor: `rgba(255, ${255 - index * 20}, ${255 - index * 20}, 1)`, // Reducing red tone gradually
-                    },
-                  ]}
-                  onPress={() => handleCheckboxPress('walkingPlainSurfaces', 9 - index * 2)} // Assigning values 0, 3, 5, 7, 9
-                >
-                  {checkboxValues.walkingPlainSurfaces === 9 - index * 2 && <View style={styles.checkIcon} />}
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-        </View>
-
-        
-
-        <View style={styles.section}>
-          <View style={styles.sectionContent}>
-            <Text style={styles.label}>Sitting on a chair:</Text>
-            <View style={styles.checkboxContainer}>
-              {Array(5).fill(null).map((_, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.checkbox,
-                    checkboxValues.sittingChair === 9 - index * 2 && styles.selectedCheckbox,
-                    {
-                      backgroundColor: `rgba(255, ${255 - index * 20}, ${255 - index * 20}, 1)`, // Reducing red tone gradually
-                    },
-                  ]}
-                  onPress={() => handleCheckboxPress('sittingChair', 9 - index * 2)} // Assigning values 0, 3, 5, 7, 9
-                >
-                  {checkboxValues.sittingChair === 9 - index * 2 && <View style={styles.checkIcon} />}
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <View style={styles.sectionContent}>
-            <Text style={styles.label}>Climbing up stairs:</Text>
-            <View style={styles.checkboxContainer}>
-              {Array(5).fill(null).map((_, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.checkbox,
-                    checkboxValues.climbingStairs === 9 - index * 2 && styles.selectedCheckbox,
-                    {
-                      backgroundColor: `rgba(255, ${255 - index * 20}, ${255 - index * 20}, 1)`, // Reducing red tone gradually
-                    },
-                  ]}
-                  onPress={() => handleCheckboxPress('climbingStairs', 9 - index * 2)} // Assigning values 0, 3, 5, 7, 9
-                >
-                  {checkboxValues.climbingStairs === 9 - index * 2 && <View style={styles.checkIcon} />}
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.section}>
-        <View style={styles.sectionContent}>
-          <Text style={styles.label}>Getting Down stairs:</Text>
-          <View style={styles.checkboxContainer}>
-            {Array(5).fill(null).map((_, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[
-                  styles.checkbox,
-                  checkboxValues.gettingDownStairs === 9 - index * 2 && styles.selectedCheckbox,
-                  {
-                    backgroundColor: `rgba(255, ${255 - index * 20}, ${255 - index * 20}, 1)`, // Reducing red tone gradually
-                  },
-                ]}
-                onPress={() => handleCheckboxPress('gettingDownStairs', 9 - index * 2)} // Assigning values 0, 3, 5, 7, 9
-              >
-                {checkboxValues.gettingDownStairs === 9 - index * 2 && <View style={styles.checkIcon} />}
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <View style={styles.sectionContent}>
-          <Text style={styles.label}>Taking turns to right and left side:</Text>
-          <View style={styles.checkboxContainer}>
-            {Array(5).fill(null).map((_, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[
-                  styles.checkbox,
-                  checkboxValues.takingTurns === 9 - index * 2 && styles.selectedCheckbox,
-                  {
-                    backgroundColor: `rgba(255, ${255 - index * 20}, ${255 - index * 20}, 1)`, // Reducing red tone gradually
-                  },
-                ]}
-                onPress={() => handleCheckboxPress('takingTurns', 9 - index * 2)} // Assigning values 0, 3, 5, 7, 9
-              >
-                {checkboxValues.takingTurns === 9 - index * 2 && <View style={styles.checkIcon} />}
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <View style={styles.sectionContent}>
-          <Text style={styles.label}>Squatting on the floor:</Text>
-          <View style={styles.checkboxContainer}>
-            {Array(5).fill(null).map((_, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[
-                  styles.checkbox,
-                  checkboxValues.squattingFloor === 9 - index * 2 && styles.selectedCheckbox,
-                  {
-                    backgroundColor: `rgba(255, ${255 - index * 20}, ${255 - index * 20}, 1)`, // Reducing red tone gradually
-                  },
-                ]}
-                onPress={() => handleCheckboxPress('squattingFloor', 9 - index * 2)} // Assigning values 0, 3, 5, 7, 9
-              >
-                {checkboxValues.squattingFloor === 9 - index * 2 && <View style={styles.checkIcon} />}
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <View style={styles.sectionContent}>
-          <Text style={styles.label}>Kneeling Down:</Text>
-          <View style={styles.checkboxContainer}>
-            {Array(5).fill(null).map((_, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[
-                  styles.checkbox,
-                  checkboxValues.kneelingDown === 9 - index * 2 && styles.selectedCheckbox,
-                  {
-                    backgroundColor: `rgba(255, ${255 - index * 20}, ${255 - index * 20}, 1)`, // Reducing red tone gradually
-                  },
-                ]}
-                onPress={() => handleCheckboxPress('kneelingDown', 9 - index * 2)} // Assigning values 0, 3, 5, 7, 9
-              >
-                {checkboxValues.kneelingDown === 9 - index * 2 && <View style={styles.checkIcon} />}
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <View style={styles.sectionContent}>
-          <Text style={styles.label}>Holding a Pen/Pencil and write:</Text>
-          <View style={styles.checkboxContainer}>
-            {Array(5).fill(null).map((_, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[
-                  styles.checkbox,
-                  checkboxValues.holdingPen === 9 - index * 2 && styles.selectedCheckbox,
-                  {
-                    backgroundColor: `rgba(255, ${255 - index * 20}, ${255 - index * 20}, 1)`, // Reducing red tone gradually
-                  },
-                ]}
-                onPress={() => handleCheckboxPress('holdingPen', 9 - index * 2)} // Assigning values 0, 3, 5, 7, 9
-              >
-                {checkboxValues.holdingPen === 9 - index * 2 && <View style={styles.checkIcon} />}
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-      </View>
+        {renderCategory('standingBothLegs', 'Standing on both legs:')}
+        {renderCategory('standingAffectedLeg', 'Standing on the affected leg:')}
+        {renderCategory('walkingPlainSurfaces', 'Walking on plain surfaces:')}
+        {renderCategory('sittingChair', 'Sitting on a chair:')}
+        {renderCategory('climbingStairs', 'Climbing up stairs:')}
+        {renderCategory('gettingDownStairs', 'Getting Down stairs:')}
+        {renderCategory('takingTurns', 'Taking turns to right and left side:')}
+        {renderCategory('squattingFloor', 'Squatting on the floor:')}
+        {renderCategory('kneelingDown', 'Kneeling Down:')}
+        {renderCategory('holdingPen', 'Holding a Pen/Pencil and write:')}
       </View>
     </ScrollView>
   );
@@ -321,7 +130,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: '#000000',
-    marginBottom: 8,
+    marginBottom: 16,
   },
   input: {
     borderWidth: 1,
@@ -334,23 +143,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  checkboxWrapper: {
+    alignItems: 'center',
+  },
   checkbox: {
-    width: 24,
-    height: 24,
+    width: 30,
+    height: 30,
     borderWidth: 1,
     borderColor: '#000000',
     borderRadius: 4,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 4,
   },
   selectedCheckbox: {
     backgroundColor: '#000000', // Black tick mark
   },
   checkIcon: {
-    width: 12,
-    height: 12,
+    width: 18,
+    height: 18,
     backgroundColor: 'black',
     borderRadius: 2,
+  },
+  buttonValue: {
+    textAlign: 'center',
+    marginTop: 4,
   },
 });
 
